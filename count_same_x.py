@@ -1,6 +1,6 @@
 # -*- coding:utf-8 -*-
 
-# 求有序数列里有某个数字个数
+# 求有序数列里某个数字个数
 
 def count_same(input_list, x):
     def search(input_list, x):
@@ -16,4 +16,10 @@ def count_same(input_list, x):
         return head
     return search(input_list, x) - search(input_list, x-1)
 
-print(count_same([1,2,2,2,2,3], 2))
+
+def test():
+    print(count_same([1, 2, 2, 2, 2, 3], 2))
+
+
+if __name__ == '__main__':
+    test()   # output: 4

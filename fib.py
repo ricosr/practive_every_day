@@ -15,4 +15,11 @@ def fib(n):
         n1 = n2
         n2 = n3
     return n3
-print(fib(6))  # 0 1 2 3 5 8
+
+
+def test():
+    print(fib(6))  # 0 1 2 3 5 8
+
+
+if __name__ == '__main__':
+    test()  # 8

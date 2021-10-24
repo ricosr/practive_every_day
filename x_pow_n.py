@@ -7,20 +7,22 @@ def pow_x_n(x, n):
         return 1
     if n == 1:
         return x
-    tmp = pow_x_n(x, abs(n//2))
+    tmp = pow_x_n(x, abs(n // 2))
     if n > 0:
         if n % 2 == 0:
-            return tmp*tmp
+            return tmp * tmp
         else:
-            return tmp*tmp*x
+            return tmp * tmp * x
     else:
         if n % 2 == 0:
-            return 1 / (tmp*tmp)
+            return 1 / (tmp * tmp)
         else:
-            return 1 / (tmp*tmp*x)
-
-print(pow_x_n(2,-2))
+            return 1 / (tmp * tmp * x)
 
 
+def test():
+    print(pow_x_n(2, -2))
 
 
+if __name__ == '__main__':
+    test()   # output: 0.25
