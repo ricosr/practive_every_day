@@ -43,7 +43,7 @@ def if_duplicate2(input_list):   # 书上思路
 def test():
     print(if_duplicate1([2, 3, 1, 0, 2, 5, 3]))
     print(if_duplicate1([3, 4, 5, 6, 2, 1]))
-    print(if_duplicate2([2, 3, 1, 0, 2, 5, 3]))
+    print(if_duplicate2([2, 3, 1, 2, 5, 3]))
     print(if_duplicate2([3, 4, 5, 6, 2, 1]))
 
 
