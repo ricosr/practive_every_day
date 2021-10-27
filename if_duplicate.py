@@ -1,6 +1,6 @@
 # -*- coding:utf-8 -*-
 
-# 剑指3：输入长度为n的数组，数组元素为0~n-1范围的数，输出是否有重复元素
+# 剑指3-1：输入长度为n的数组，数组元素为0~n-1范围的数，输出是否有重复元素
 
 def if_duplicate1(input_list):
     list_length = len(input_list)
@@ -30,6 +30,7 @@ def if_duplicate2(input_list):   # 书上思路
             return False
 
     for i in range(list_length):
+        print(i)
         while input_list[i] != i:
             if input_list[i] == input_list[input_list[i]]:
                 return True
@@ -41,10 +42,10 @@ def if_duplicate2(input_list):   # 书上思路
 
 
 def test():
-    print(if_duplicate1([2, 3, 1, 0, 2, 5, 3]))
-    print(if_duplicate1([3, 4, 5, 6, 2, 1]))
-    print(if_duplicate2([2, 3, 1, 2, 5, 3]))
-    print(if_duplicate2([3, 4, 5, 6, 2, 1]))
+    # print(if_duplicate1([2, 3, 1, 0, 2, 5, 3]))
+    # print(if_duplicate1([3, 4, 5, 6, 2, 1]))
+    # print(if_duplicate2([2, 3, 1, 2, 5, 3]))
+    print(if_duplicate2([3, 1, 2, 1]))
 
 
 if __name__ == '__main__':
