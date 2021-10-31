@@ -24,18 +24,16 @@ class LinkList:
 def reverse_link_list(head):
     p1 = Node
     while head != Node:
-        print(head.value)
         next = head.next
         head.next = p1
         p1 = head
-        print(p1)
         head = next
     return p1
 
 
 def test(head):
     ret = reverse_link_list(head)
-    while ret.next != Node:
+    while ret != Node:
         print(ret.value)
         ret = ret.next
 
