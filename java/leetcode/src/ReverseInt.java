@@ -1,4 +1,4 @@
-public class reverseInt {
+public class ReverseInt {
 // https://leetcode-cn.com/problems/reverse-integer/
     public static int reverse(int x) {
         int ret = 0;
