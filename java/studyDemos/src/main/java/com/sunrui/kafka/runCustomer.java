@@ -7,7 +7,7 @@ public class runCustomer {
     public static void main(String[] args) {
         CustomerTest cusObj = new CustomerTest();
         cusObj.init();
-        String topic = "test1121";
+        String topic = "test1122";
         cusObj.consumeMsg(topic);
 
     }

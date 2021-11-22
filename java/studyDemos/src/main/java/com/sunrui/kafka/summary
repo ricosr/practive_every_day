@@ -1,0 +1,21 @@
+1. 消息分区规则：
+   生产900条数据：key从0到899，consumer1消费到278，consumer2消费到299，consumer3消费到323
+   生产300条数据：key从0到299，consumer1消费到96，consumer2消费到87，consumer3消费到117
+   生产90条数据：key从0到89，consumer1消费到19，consumer2消费到31，consumer3消费到40
+   越多越趋于平均
+
+   key=null:
+   生产90条数据：consumer1消费到32，consumer2消费到27，consumer3消费到31
+   生产300条数据：consumer1消费到93，consumer2消费到103，consumer3消费到104
+   生产900条数据：consumer1消费到293，consumer2消费到324，consumer3消费到283
+   一直相对平均
+
+   如果没有指定key值并且可用分区个数大于0时，在就可用分区中做轮询决定改消息分配到哪个partition。
+   如果没有指定key值并且没有可用分区时，在所有分区中轮询决定改消息分配到哪个partition。
+   如果指定key值，对key做hash分配到指定的partition。
+
+   换了异步很不平均，带定位。。。
+
+2. 生产者速度：数据9000，只差10-20ms，不明显，要加大并发再测试
+
+
