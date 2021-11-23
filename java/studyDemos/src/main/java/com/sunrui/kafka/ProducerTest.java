@@ -12,7 +12,7 @@ public class ProducerTest {
 
     public boolean init() {
         props.put("bootstrap.servers", "192.168.19.128:9092,192.168.19.129:9092,192.168.19.130:9092");
-        props.put("acks", "all");
+        props.put("acks", "1");
         props.put("retries", 0);
         props.put("batch.size", 16384);
 

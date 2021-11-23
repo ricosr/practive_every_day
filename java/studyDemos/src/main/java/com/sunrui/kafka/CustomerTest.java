@@ -12,7 +12,8 @@ public class CustomerTest {
 
     public boolean init() {
         props.put("bootstrap.servers", "192.168.19.128:9092,192.168.19.129:9092,192.168.19.130:9092");
-        props.put("group.id", "test1121");
+        props.put("group.id", "group1122-1");
+        props.put("auto.offset.reset", "earliest");
         props.put("enable.auto.commit", "true");   // 自动提交偏移量
         props.put("auto.commit.interval.ms", "1000");   // 控制自动提交的频率，ms
         props.put("session.timeout.ms", "30000");    // group coordinator检测consumer发生崩溃所需的时间。一个consumer group里面的某个consumer挂掉了，最长需要 session.timeout.ms 毫秒检测出来

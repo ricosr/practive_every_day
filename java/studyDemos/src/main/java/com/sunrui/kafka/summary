@@ -1,4 +1,5 @@
 1. 消息分区规则：
+   指定key:
    生产900条数据：key从0到899，consumer1消费到278，consumer2消费到299，consumer3消费到323
    生产300条数据：key从0到299，consumer1消费到96，consumer2消费到87，consumer3消费到117
    生产90条数据：key从0到89，consumer1消费到19，consumer2消费到31，consumer3消费到40
@@ -14,8 +15,62 @@
    如果没有指定key值并且没有可用分区时，在所有分区中轮询决定改消息分配到哪个partition。
    如果指定key值，对key做hash分配到指定的partition。
 
-   换了异步很不平均，带定位。。。
+   null换了异步很不平均，指定key，消费先对平均一些：
+   生产300条数据：consumer1消费到87，consumer2消费到117，consumer3消费到96
 
-2. 生产者速度：数据9000，只差10-20ms，不明显，要加大并发再测试
+2. 生产者速度：数据9000，只差10-20ms，不明显，要加大并发再测试, acks改成all->1后明显快了80ms左右
+
+3. 消费者"auto.offset.reset", "latest" 参数：分区下有producer新提交的数据，尚未被消费，customer启动时会消费掉这部分新的数据
+    [root@localhost bin]# ./kafka-consumer-groups.sh  --bootstrap-server 192.168.19.128:9092,192.168.19.129:9092,192.168.19.130:9092 --describe --group group1122
+
+    GROUP           TOPIC           PARTITION  CURRENT-OFFSET  LOG-END-OFFSET  LAG             CONSUMER-ID                                               HOST            CLIENT-ID
+    group1122       test1122        1          22182           22182           0               consumer-group1122-1-42b9f1d9-12a2-48da-9190-674fe5b363a8 /192.168.19.1   consumer-group1122-1
+    group1122       test1122        2          18146           18146           0               consumer-group1122-1-e97542cd-889f-4c79-bafb-5d56e6bbb8a1 /192.168.19.1   consumer-group1122-1
+    group1122       test1122        0          15412           15412           0               consumer-group1122-1-35db163c-435a-4cc9-b4fe-766eb97c2ac5 /192.168.19.1   consumer-group1122-1
+    [root@localhost bin]# ./kafka-consumer-groups.sh  --bootstrap-server 192.168.19.128:9092,192.168.19.129:9092,192.168.19.130:9092 --describe --group group1122
+
+    GROUP           TOPIC           PARTITION  CURRENT-OFFSET  LOG-END-OFFSET  LAG             CONSUMER-ID                                               HOST            CLIENT-ID
+    group1122       test1122        0          15412           15529           117             consumer-group1122-1-363bc500-1a4d-4c5c-88c2-b45abc224607 /192.168.19.1   consumer-group1122-1
+    group1122       test1122        2          18146           18242           96              consumer-group1122-1-ed1650df-1b10-44c4-9c8d-22a74b5cb9dc /192.168.19.1   consumer-group1122-1
+    group1122       test1122        1          22182           22269           87              consumer-group1122-1-44b52e80-07c5-45ff-9440-22db29d6e838 /192.168.19.1   consumer-group1122-1
+    [root@localhost bin]# ./kafka-consumer-groups.sh  --bootstrap-server 192.168.19.128:9092,192.168.19.129:9092,192.168.19.130:9092 --describe --group group1122
+
+    GROUP           TOPIC           PARTITION  CURRENT-OFFSET  LOG-END-OFFSET  LAG             CONSUMER-ID                                               HOST            CLIENT-ID
+    group1122       test1122        0          15529           15529           0               consumer-group1122-1-363bc500-1a4d-4c5c-88c2-b45abc224607 /192.168.19.1   consumer-group1122-1
+    group1122       test1122        2          18242           18242           0               consumer-group1122-1-ed1650df-1b10-44c4-9c8d-22a74b5cb9dc /192.168.19.1   consumer-group1122-1
+    group1122       test1122        1          22269           22269           0               consumer-group1122-1-44b52e80-07c5-45ff-9440-22db29d6e838 /192.168.19.1   consumer-group1122-1
 
 
+4. 消费者"auto.offset.reset", "earliest"参数：分区下有producer新提交的数据，尚未被消费，customer启动时会消费掉这部分新的数据
+    [root@localhost bin]# ./kafka-consumer-groups.sh  --bootstrap-server 192.168.19.128:9092,192.168.19.129:9092,192.168.19.130:9092 --describe --group group1122
+
+    GROUP           TOPIC           PARTITION  CURRENT-OFFSET  LOG-END-OFFSET  LAG             CONSUMER-ID                                               HOST            CLIENT-ID
+    group1122       test1122        0          15529           15646           117             consumer-group1122-1-363bc500-1a4d-4c5c-88c2-b45abc224607 /192.168.19.1   consumer-group1122-1
+    group1122       test1122        2          18242           18338           96              consumer-group1122-1-ed1650df-1b10-44c4-9c8d-22a74b5cb9dc /192.168.19.1   consumer-group1122-1
+    group1122       test1122        1          22269           22356           87              consumer-group1122-1-44b52e80-07c5-45ff-9440-22db29d6e838 /192.168.19.1   consumer-group1122-1
+    [root@localhost bin]# ./kafka-consumer-groups.sh  --bootstrap-server 192.168.19.128:9092,192.168.19.129:9092,192.168.19.130:9092 --describe --group group1122
+
+    GROUP           TOPIC           PARTITION  CURRENT-OFFSET  LOG-END-OFFSET  LAG             CONSUMER-ID                                               HOST            CLIENT-ID
+    group1122       test1122        1          22356           22356           0               consumer-group1122-1-b329f5ea-9627-463e-a07b-dff66ca7eb25 /192.168.19.1   consumer-group1122-1
+    group1122       test1122        0          15646           15646           0               consumer-group1122-1-a0d85cf8-53ea-4b0b-a8b7-5a3fd4338db1 /192.168.19.1   consumer-group1122-1
+    group1122       test1122        2          18338           18338           0               consumer-group1122-1-e99f1a4c-2189-45c3-8c12-525f08221bf6 /192.168.19.1   consumer-group1122-1
+
+
+    分区下有数据，新启动消费者组，customer启动时会从各个分区头开始消费：
+    [root@localhost bin]# ./kafka-consumer-groups.sh  --bootstrap-server 192.168.19.128:9092,192.168.19.129:9092,192.168.19.130:9092 --describe --group group1122-1
+
+    Warning: Consumer group 'group1122-1' is rebalancing.
+    [root@localhost bin]# ./kafka-consumer-groups.sh  --bootstrap-server 192.168.19.128:9092,192.168.19.129:9092,192.168.19.130:9092 --describe --group group1122-1
+
+    GROUP           TOPIC           PARTITION  CURRENT-OFFSET  LOG-END-OFFSET  LAG             CONSUMER-ID                                                 HOST            CLIENT-ID
+    group1122-1     test1122        1          22356           22356           0               consumer-group1122-1-1-74fe84a9-874c-473c-a31c-6f4568dc070b /192.168.19.1   consumer-group1122-1-1
+    group1122-1     test1122        2          18338           18338           0               consumer-group1122-1-1-f929e9c0-0288-4c05-ab4f-6ca5219a58a9 /192.168.19.1   consumer-group1122-1-1
+    group1122-1     test1122        0          15646           15646           0               consumer-group1122-1-1-6197eda2-11f4-43af-9124-5f8c3cbcf2a3 /192.168.19.1   consumer-group1122-1-1
+    consumer1消费到18338，consumer2消费到22356，consumer3消费到15646，和命令出的数据条数相同
+
+5. kafka是如何记住消费者消费进度的，是依靠kafka自带的topic __consumer_offsets 下，停掉一个customer再重启，是根据此topic下的记录决定它从哪开始消费，如果customer的数量发生变化，则需要rebalancing各个分区，
+   但是customer数量大于分区数时（4：3），会有customer空闲，可能会占用之前存在的CONSUMER-ID；
+   但是customer数量小于分区数时（2：3），会有customer负责两个分区的消费
+
+
+要rebalancing各个分区问题还要确定一下？？

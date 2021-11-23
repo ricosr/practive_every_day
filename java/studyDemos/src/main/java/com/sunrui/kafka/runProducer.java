@@ -18,8 +18,8 @@ public class runProducer {
 //        System.out.printf("sync timestamp:%d%n", System.currentTimeMillis() - start1);
 
         long start2 = System.currentTimeMillis();
-        for (int i=0; i < 9000 ; i++) {
-            proObj.sendAsyncMsg(msg, null, topic);
+        for (int i=0; i < 300 ; i++) {
+            proObj.sendAsyncMsg(msg, Integer.toString(i), topic);
         }
         System.out.printf("sync timestamp:%d%n", System.currentTimeMillis() - start2);
 //
