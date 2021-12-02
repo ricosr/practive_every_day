@@ -36,9 +36,38 @@ public class RedisClient {
 
     }
 
+    /**
+     * 测试key->value
+     * @throws InterruptedException
+     */
     @Test
     public void testKey() throws InterruptedException {
-        System.out.println("判断某个键是否存在：" + jedis.exists("name"));
+        System.out.println("新增<'username','rico'>的键值对：" + jedis.set("username", "rico"));
+        System.out.println("新增<'password','123456'>的键值对：" + jedis.set("password", "123456"));
+        System.out.println("查询username的value：" + jedis.get("username"));
+        System.out.println("查询password的value：" + jedis.get("password"));
+        System.out.println("查看键password所存储的值的类型："+jedis.type("password"));
+
+
+        System.out.println("设置password过期时间：" + jedis.expire("password", 10));
+        Thread.sleep(2000);
+        System.out.println("查看键password的剩余生存时间："+jedis.ttl("password"));
+//        System.out.println("删除password的过期时间："+jedis.persist("password"));
+        Thread.sleep(8000);
+        System.out.println("判断password key是否存在：" + jedis.exists("password"));
+        System.out.println("查看键password的剩余生存时间："+jedis.ttl("password"));
+        System.out.println("查询password的value：" + jedis.get("password"));
+        System.out.println("查询password的value：" + jedis.get("password"));
+
+//        Set<String> allKeys = jedis.keys("*");
+//        for (String key: allKeys) {
+//            System.out.println(key);
+//        }
+//        System.out.println("查询所有的key:" + jedis.keys("*").toString());
+        System.out.println("删除key username：" + jedis.del("username"));
+        System.out.println("判断password key是否存在：" + jedis.exists("password"));
+        System.out.println("判断username key是否存在：" + jedis.exists("username"));
+
     }
 
 
