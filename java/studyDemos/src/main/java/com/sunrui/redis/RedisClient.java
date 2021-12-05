@@ -5,9 +5,12 @@ import redis.clients.jedis.JedisCluster;
 import redis.clients.jedis.JedisPoolConfig;
 
 import org.junit.Test;
+import redis.clients.jedis.SortingParams;
 
 
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 public class RedisClient {
@@ -162,11 +165,94 @@ public class RedisClient {
 //        print("eleSet1中的元素："+jedis.smembers("eleSet1"));
 //        print("eleSet3中的元素："+jedis.smembers("eleSet3"));
 
+    }
+
+    /**
+     * 散列表
+     */
+    @Test
+    public void testHash() {
+        Map<String, String> map = new HashMap<String, String>();
+        map.put("key1", "value1");
+        map.put("key2", "value2");
+        map.put("key3", "value3");
+        map.put("key4", "value4");
+
+        jedis.hmset("hash", map);
+        jedis.hset("hash", "key5", "value5");
+        print("散列hash的所有键值对为：" + jedis.hgetAll("hash"));    //return Map<String,String>
+        print("散列hash的所有键为：" + jedis.hkeys("hash"));    //return Set<String>
+        print("散列hash的所有值为：" + jedis.hvals("hash"));    //return List<String>
+
+        print("将key6保存的值加上一个整数，如果key6不存在则添加key6：" + jedis.hincrBy("hash", "key6", 6));
+        print("散列hash的所有键值对为：" + jedis.hgetAll("hash"));    //return Map<String,String>
+
+        print("将key6保存的值加上一个整数，如果key6不存在则添加key6：" + jedis.hincrBy("hash", "key6", 3));
+        print("散列hash的所有键值对为：" + jedis.hgetAll("hash"));    //return Map<String,String>
+
+        print("删除一个或者多个键值对：" + jedis.hdel("hash", "key2"));
+        print("散列hash的所有键值对为：" + jedis.hgetAll("hash"));    //return Map<String,String>
+
+        print("散列hash中键值对的个数：" + jedis.hlen("hash"));
+
+        print("判断hash中是否存在key2：" + jedis.hexists("hash", "key2"));
+        print("判断hash中是否存在key3：" + jedis.hexists("hash", "key3"));
+
+        print("获取hash中的值：" + jedis.hmget("hash", "key3"));
+        print("获取hash中的值：" + jedis.hmget("hash", "key3", "key4"));
 
     }
 
 
+    /**
+     * 有序集合
+     */
+    @Test
+    public void testSortedSet() {
+        Map<String,Double> map = new HashMap<String,Double>();
+        map.put("keyA", 1.2);
+        map.put("keyB", 4.0);
+        map.put("keyC", 5.0);
+        map.put("keyD", 0.2);
+        // 将一个或多个 member 元素及其 score 值加入到有序集 key 当中，如果某个 member 已经是有序集的成员，那么更新这个 member 的 score 值
+        // score 值可以是整数值或双精度浮点数
 
+        print(jedis.zadd("zset", 3, "keyA"));
+        print(jedis.zadd("zset", map));
+        print("zset中的所有元素：" + jedis.zrange("zset", 0 ,-1));
+        print("zset中的所有元素：" + jedis.zrangeWithScores("zset", 0, -1));
+        print("zset中的所有元素：" + jedis.zrangeByScore("zset", 0,100));
+        print("zset中的所有元素：" + jedis.zrangeByScoreWithScores("zset", 0, 100));
+
+        print("zset中keyB的分值：" + jedis.zscore("zset", "keyB"));
+        print("zset中keyB的排名：" + jedis.zrank("zset", "keyB"));
+
+        print("删除zset中的元素keyC：" + jedis.zrem("zset", "keyC"));
+        print("zset中的所有元素：" + jedis.zrange("zset", 0 ,-1));
+
+        print("zset中元素的个数：" + jedis.zcard("zset"));
+        print("zset中分值在1-4之间的元素的个数：" + jedis.zcount("zset", 1, 4));
+        print("keyB的分值加上5：" + jedis.zincrby("zset", 5, "keyB"));
+        print("keyC的分值加上4：" + jedis.zincrby("zset", 4, "keyC"));
+        print("zset中的所有元素：" + jedis.zrange("zset", 0 ,-1));
+
+    }
+
+    /**
+     * 排序
+     */
+    @Test
+    public void testSorted() {
+        jedis.lpush("collections1", "ArrayList", "Vector", "Stack", "HashMap", "WeakHashMap", "LinkedHashMap");
+        SortingParams sortingParams = new SortingParams();
+        print("alpha排序方式：" + jedis.sort("collections1",sortingParams.alpha()));
+
+        jedis.lpush("sortedList1", "3","6","2","0","7","4");
+        print("sortedList排序前：" + jedis.lrange("sortedList1", 0, -1));
+        print("升序：" + jedis.sort("sortedList1", sortingParams.asc()));
+        print("降序：" +jedis.sort("sortedList1", sortingParams.desc()));
+
+    }
 
 }
 
