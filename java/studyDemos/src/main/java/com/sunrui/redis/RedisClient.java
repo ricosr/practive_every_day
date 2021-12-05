@@ -138,29 +138,29 @@ public class RedisClient {
      */
     @Test
     public void testSet() {
-//        print("============向集合中添加元素============");
-//        print(jedis.sadd("eleSet", "e1", "e2", "e4", "e3", "e0", "e8", "e7", "e5"));
-//        print(jedis.sadd("eleSet", "e6"));
-//        print(jedis.sadd("eleSet", "e6"));  // 返回0，集合中已经存在
-//        print("eleSet的所有元素为：" + jedis.smembers("eleSet"));
-//        print("删除一个元素e0：" + jedis.srem("eleSet", "e0"));
-//        print("eleSet的所有元素为：" + jedis.smembers("eleSet"));
-//        print("删除两个元素e7和e6：" + jedis.srem("eleSet", "e7", "e6"));
-//        print("eleSet的所有元素为：" + jedis.smembers("eleSet"));
-//        print("随机的移除集合中的一个元素：" + jedis.spop("eleSet"));
-//        print("随机的移除集合中的一个元素：" + jedis.spop("eleSet"));
-//        print("eleSet的所有元素为：" + jedis.smembers("eleSet"));
-//        print("eleSet中包含元素的个数："+jedis.scard("eleSet"));
-//        print("e3是否在eleSet中："+jedis.sismember("eleSet", "e3"));
-//        print("e5是否在eleSet中："+jedis.sismember("eleSet", "e5"));
-//        print("e1是否在eleSet中："+jedis.sismember("eleSet", "e1"));
+        print("============向集合中添加元素============");
+        print(jedis.sadd("eleSet", "e1", "e2", "e4", "e3", "e0", "e8", "e7", "e5"));
+        print(jedis.sadd("eleSet", "e6"));
+        print(jedis.sadd("eleSet", "e6"));  // 返回0，集合中已经存在
+        print("eleSet的所有元素为：" + jedis.smembers("eleSet"));
+        print("删除一个元素e0：" + jedis.srem("eleSet", "e0"));
+        print("eleSet的所有元素为：" + jedis.smembers("eleSet"));
+        print("删除两个元素e7和e6：" + jedis.srem("eleSet", "e7", "e6"));
+        print("eleSet的所有元素为：" + jedis.smembers("eleSet"));
+        print("随机的移除集合中的一个元素：" + jedis.spop("eleSet"));
+        print("随机的移除集合中的一个元素：" + jedis.spop("eleSet"));
+        print("eleSet的所有元素为：" + jedis.smembers("eleSet"));
+        print("eleSet中包含元素的个数："+jedis.scard("eleSet"));
+        print("e3是否在eleSet中："+jedis.sismember("eleSet", "e3"));
+        print("e5是否在eleSet中："+jedis.sismember("eleSet", "e5"));
+        print("e1是否在eleSet中："+jedis.sismember("eleSet", "e1"));
 
-        print(jedis.sadd("eleSet1", "e1","e2","e4","e3","e0","e8","e7","e5"));
-        print(jedis.sadd("eleSet2", "e1","e2","e4","e3","e0","e8"));
-        print("将eleSet1中删除e1并存入eleSet3中："+jedis.smove("eleSet1", "eleSet3", "e1"));
-        print("将eleSet1中删除e2并存入eleSet3中："+jedis.smove("eleSet1", "eleSet3", "e2"));
-        print("eleSet1中的元素："+jedis.smembers("eleSet1"));
-        print("eleSet3中的元素："+jedis.smembers("eleSet3"));
+//        print(jedis.sadd("eleSet1", "e1","e2","e4","e3","e0","e8","e7","e5"));
+//        print(jedis.sadd("eleSet2", "e1","e2","e4","e3","e0","e8"));
+//        print("将eleSet1中删除e1并存入eleSet3中："+jedis.smove("eleSet1", "eleSet3", "e1"));
+//        print("将eleSet1中删除e2并存入eleSet3中："+jedis.smove("eleSet1", "eleSet3", "e2"));
+//        print("eleSet1中的元素："+jedis.smembers("eleSet1"));
+//        print("eleSet3中的元素："+jedis.smembers("eleSet3"));
 
 
     }
