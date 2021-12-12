@@ -17,9 +17,6 @@ public class FailedNotify {
     //持有的锁
     private static final Object lock = new Object();
 
-    // 标记这线程是否被通知
-    boolean wasSingalled = false;
-
     //日期格式器
     private static final DateFormat format = new SimpleDateFormat("HH:mm:ss");
 
@@ -28,15 +25,12 @@ public class FailedNotify {
         System.out.println(Thread.currentThread().getName() + ": enter waitMethod at "
                 + format.format(new Date()));
         synchronized (lock){
-            if (!wasSingalled) {
                 //调用wait方法执行等待
                 System.out.println(Thread.currentThread().getName() + ": start invoke wait method at "
                         + format.format(new Date()));
                 lock.wait();
                 System.out.println(Thread.currentThread().getName() + ": end invoke wait method at "
                         + format.format(new Date()));
-            }
-            wasSingalled = false;
         }
         System.out.println(Thread.currentThread().getName() + ": exit waitMethod at "
                 + format.format(new Date()));
@@ -50,7 +44,6 @@ public class FailedNotify {
             //调用通知的方法
             System.out.println(Thread.currentThread().getName() + ": start invoke notify method at "
                     + format.format(new Date()));
-            wasSingalled = true;
             lock.notifyAll();
             System.out.println(Thread.currentThread().getName() + ": end invoke notify method at "
                     + format.format(new Date()));
